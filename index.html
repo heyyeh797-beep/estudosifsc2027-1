@@ -37,6 +37,7 @@ button:hover,a.btn:hover{border-color:var(--blue)}button[aria-pressed=true],butt
 .opt{display:block;width:100%;text-align:left;margin-bottom:8px;padding:12px 14px;font:500 16px/1.5 var(--bd)}.opt b{font:700 15px var(--hd);margin-right:8px}
 .opt.sel{border:2px solid var(--blue);background:color-mix(in srgb,var(--blue) 12%,var(--surf))}
 .row{display:flex;gap:12px;flex-wrap:wrap;align-items:end}label{font:600 14px var(--hd);display:grid;gap:4px}
+.row label{min-width:0;max-width:100%}.row label>select{width:100%;max-width:100%;text-overflow:ellipsis}
 select{font:16px var(--bd);padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--surf);color:var(--ink)}
 .score{font:800 3rem var(--hd);margin:0}.rv{border-left:4px solid var(--line);padding:4px 0 4px 14px;margin:16px 0}.rv.ok{border-color:var(--ok)}.rv.bad{border-color:var(--bad)}
 .ok b{color:var(--ok)}.bad b{color:var(--bad)}footer{max-width:880px;margin:0 auto;padding:0 20px 40px;color:var(--mute);font-size:14px}
@@ -171,6 +172,10 @@ input.flt{width:100%;font:16px var(--bd);padding:10px 12px;border:1px solid var(
 
 /* cabeçalho */
 header{background:color-mix(in srgb,var(--bg) 86%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:box-shadow .3s ease;view-transition-name:hdr}
+#nvl,#nvr{display:none;position:absolute;top:0;bottom:0;width:44px;align-items:center;font:700 26px var(--hd);color:var(--blue);border:0;border-radius:0;box-shadow:none;margin:0;cursor:pointer}
+#nvr{right:0;justify-content:flex-end;padding-right:10px;background:linear-gradient(to right,transparent,var(--bg) 65%)}
+#nvl{left:0;padding-left:10px;background:linear-gradient(to left,transparent,var(--bg) 65%)}
+@media(max-width:720px){header.mr #nvr,header.ml #nvl{display:flex}}
 header.stuck{box-shadow:0 10px 24px -14px rgba(20,33,61,.45)}
 header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--blue);transform:scaleX(var(--sp,0));transform-origin:left;pointer-events:none}
 nav b{display:inline-block;transition:transform .35s var(--spring)}nav b:hover{transform:rotate(-3deg) scale(1.05)}
@@ -280,7 +285,7 @@ html.tt *,html.tt *::before,html.tt *::after{transition:background-color .4s eas
  .card,.tc,.fcard,.wkc{box-shadow:none}
 }
 </style><script>try{var _t=localStorage.getItem("fed-theme");if(_t==="dark"||_t==="light")document.documentElement.dataset.theme=_t}catch(e){}</script></head><body>
-<header><nav><b><a class="lg" href="#/">estudos daora</a></b><a href="#/m">Matemática</a><a href="#/p">Português</a><a href="#/g">Geografia e História</a><a href="#/c">Ciências</a><a href="#/f">Fórmulas</a><a href="#/pl">Planejador</a><a href="#/r">Meu progresso</a><a href="#/s">Simulado</a><button id="mus" type="button" aria-pressed="true" aria-label="Silenciar música de fundo" title="Silenciar música de fundo">🔊</button><button id="thm" type="button" aria-label="Usar tema escuro" title="Usar tema escuro">🌙</button></nav></header>
+<header><nav><b><a class="lg" href="#/">estudos daora</a></b><a href="#/m">Matemática</a><a href="#/p">Português</a><a href="#/g">Geografia e História</a><a href="#/c">Ciências</a><a href="#/f">Fórmulas</a><a href="#/r">Meu progresso</a><a href="#/s">Simulado</a><button id="mus" type="button" aria-pressed="true" aria-label="Silenciar música de fundo" title="Silenciar música de fundo">🔊</button><button id="thm" type="button" aria-label="Usar tema escuro" title="Usar tema escuro">🌙</button></nav><button type="button" id="nvl" aria-label="Ver itens anteriores do menu">‹</button><button type="button" id="nvr" aria-label="Ver mais itens do menu">›</button></header>
 <main id="app"></main>
 <footer>Conteúdos organizados a partir do <a href="https://www.ifsc.edu.br/documents/d/ingresso/edital-05_2027_1_tecnico_integrado_prova-ok-1-" target="_blank" rel="noopener">Anexo V (Conteúdo programático) do Edital de Ingresso nº 05/DEING/2027/1 do IFSC</a>, cursos técnicos integrados. A prova é em 29/11/2026, às 14h, com 28 questões (7 de cada área). Confira sempre o edital e eventuais retificações no site do IFSC.</footer>
 <script>
@@ -1091,42 +1096,9 @@ function gnew(f){
 
 /* ===== Páginas ===== */
 let timer=null,T=null,cfg={};const curc={};
-function navMark(){const[,v,id]=location.hash.split("/");let k="#/";if(v==="s")k="#/s";else if(v==="r")k="#/r";else if(v==="pl")k="#/pl";else if(v==="f")k="#/f";else if(SUB.some(x=>x[0]===v))k="#/"+v;else if(v==="t"||v==="e"){const f=v==="t"?ALL.find(x=>x.id===id):ALL.find(x=>x.tl&&x.tl.includes(id));if(f)k="#/"+f.sub}document.querySelectorAll("nav a:not(.lg)").forEach(a=>a.classList.toggle("on",a.getAttribute("href")===k))}
+function navMark(){const[,v,id]=location.hash.split("/");let k="#/";if(v==="s")k="#/s";else if(v==="r")k="#/r";else if(v==="f")k="#/f";else if(SUB.some(x=>x[0]===v))k="#/"+v;else if(v==="t"||v==="e"){const f=v==="t"?ALL.find(x=>x.id===id):ALL.find(x=>x.tl&&x.tl.includes(id));if(f)k="#/"+f.sub}document.querySelectorAll("nav a:not(.lg)").forEach(a=>a.classList.toggle("on",a.getAttribute("href")===k))}
 
-/* ===== Planejador de estudos ===== */
-function planner(){
- app.style.removeProperty("--sc");
- const K="fed-plan",ld=()=>{try{return JSON.parse(localStorage.getItem(K))||{}}catch(e){return{}}},sv=o=>{try{localStorage.setItem(K,JSON.stringify(o))}catch(e){}};
- const pad=n=>String(n).padStart(2,"0"),iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`,dm=d=>`${pad(d.getDate())}/${pad(d.getMonth()+1)}`;
- const DN=["dom","seg","ter","qua","qui","sex","sáb"];
- let st=ld();const sel=new Set(st.sel||SUB.map(x=>x[0]));
- st.s=st.s||iso(new Date());st.e=st.e||"2026-11-28";st.wk=st.wk??1;st.done=st.done||{};
- app.innerHTML=`<h2>Planejador de estudos</h2>
- <div class="card noprint"><div class="chips" id="plc">${SUB.map(([s,n,a])=>`<button type="button" data-s="${s}" aria-pressed="${sel.has(s)}">${n} (${a.length})</button>`).join("")}</div>
- <div class="row"><label>Início<input type="date" id="pls" value="${st.s}"></label><label>Término<input type="date" id="ple" value="${st.e}"></label>
- <label>Dias<select id="plw"><option value="1">Segunda a sexta</option><option value="0">Todos os dias</option></select></label><button class="pri" id="plg" type="button">Gerar planejamento</button></div></div>
- <div id="plo"></div>`;
- $("#plw").value=st.wk;
- $("#plc").onclick=e=>{const b=e.target.closest("button");if(!b)return;const k=b.dataset.s;sel.has(k)?sel.delete(k):sel.add(k);b.setAttribute("aria-pressed",sel.has(k))};
- const gen=()=>{
-  st.s=$("#pls").value;st.e=$("#ple").value;st.wk=+$("#plw").value;st.sel=[...sel];sv(st);
-  const o=$("#plo"),a=new Date(st.s+"T12:00"),b=new Date(st.e+"T12:00");
-  if(!sel.size||isNaN(a)||isNaN(b)||b<a){o.innerHTML=`<p class="card">Escolha ao menos uma matéria e um período válido (término depois do início).</p>`;return}
-  const days=[];for(let d=new Date(a);d<=b;d.setDate(d.getDate()+1))if(!st.wk||(d.getDay()>0&&d.getDay()<6))days.push(new Date(d));
-  if(!days.length){o.innerHTML=`<p class="card">Nenhum dia útil nesse período.</p>`;return}
-  const items=SUB.filter(x=>sel.has(x[0])).flatMap(([s,,arr])=>arr.map((f,i)=>({f,k:(i+.5)/arr.length}))).sort((x,y)=>x.k-y.k);
-  const N=items.length,D=days.length;
-  const wks=[];days.forEach((d,i)=>{const mon=new Date(d);mon.setDate(d.getDate()-((d.getDay()+6)%7));const key=iso(mon);let w=wks.find(x=>x.k===key);if(!w)wks.push(w={k:key,d:[]});w.d.push([d,items.slice(Math.floor(i*N/D),Math.floor((i+1)*N/D))])});
-  o.innerHTML=`<p class="card" style="margin:20px 0">Você tem <b>${N}</b> assuntos em <b>${D}</b> dias de estudo, uma média de <b>${fm(N/D)}</b> por dia. Último dia: <b>${dm(days[D-1])}</b>.</p>
-  <p class="noprint"><button class="pri" type="button" onclick="print()">Imprimir / salvar PDF</button> <span id="pld" style="color:var(--mute)"></span></p>`+
-  wks.map((w,i)=>`<h4>Semana ${i+1} · ${dm(w.d[0][0])}</h4><div class="grid" style="margin-bottom:16px">${w.d.map(([d,it])=>`<div class="card" style="padding:14px 16px"><small style="font:600 13px var(--hd);color:var(--mute)">${DN[d.getDay()].toUpperCase()} · ${dm(d)}</small>${it.length?it.map(({f})=>`<div class="tc" style="--sc:var(--c-${f.sub});margin-top:10px;padding:10px 12px"><label style="display:flex;gap:10px;align-items:flex-start;font:inherit"><input type="checkbox" data-id="${f.id}" ${st.done[f.id]?"checked":""} style="margin-top:4px"><span><b><a href="#/t/${f.id}" style="color:inherit;text-decoration:none">${f.name}</a></b><small>${SN[f.sub]} · ${f.cat}</small></span></label></div>`).join(""):`<p style="color:var(--mute);margin:8px 0 0;font-size:15px">Dia livre</p>`}</div>`).join("")}</div>`).join("");
-  const cnt=()=>{const n=items.filter(x=>st.done[x.f.id]).length;$("#pld").textContent=`${n} de ${N} concluídos`};cnt();
-  o.onchange=e=>{const c=e.target.closest("input[data-id]");if(!c)return;st.done[c.dataset.id]=c.checked||undefined;sv(st);cnt()};
- };
- $("#plg").onclick=gen;if(st.sel)gen();
-}
-
-function route(){clearInterval(timer);const[,v,id]=location.hash.split("/");if(v==="t")topic(id);else if(v==="e")evento(id);else if(v==="s")simu(id);else if(v==="r")progress();else if(v==="pl")planner();else if(v==="f")formulas();else if(SUB.some(x=>x[0]===v))subj(v);else index();scrollTo({top:0,behavior:"instant"});app.classList.remove("in");void app.offsetWidth;app.classList.add("in");navMark()}
+function route(){clearInterval(timer);const[,v,id]=location.hash.split("/");if(v==="t")topic(id);else if(v==="e")evento(id);else if(v==="s")simu(id);else if(v==="r")progress();else if(v==="f")formulas();else if(SUB.some(x=>x[0]===v))subj(v);else index();scrollTo({top:0,behavior:"instant"});app.classList.remove("in");void app.offsetWidth;app.classList.add("in");navMark()}
 addEventListener("hashchange",route);
 /* ===== Progresso, revisão espaçada e relatório ===== */
 const PK="fed-prog",DAY=864e5,STEPS=[1,3,7],SN=Object.fromEntries(SUB.map(x=>[x[0],x[1]]));
@@ -1531,11 +1503,52 @@ BANK.c.push(
 ()=>mk("corpo",ir("2026.2 · Q27")+"O lenacapavir, medicamento injetável contra o HIV, forma um pequeno depósito sob a pele e libera o remédio aos poucos, protegendo por até seis meses. Diferente dele, a vacina gera imunidade duradoura. Isso ocorre porque a vacina:","faz o sistema imunológico aprender a se defender contra o microrganismo e guardar essa informação por muito tempo.",["possui anticorpos capazes de ficarem guardados por muito tempo em nosso corpo.", "produz imunização ativa já que possui antígenos capazes de atacarem o microrganismo invasor por muitos anos.", "possui medicamentos que conseguem ser liberados de forma mais lenta do que o lenacapavir.", "estimula o cérebro a memorizar características do microrganismo para defender o corpo mais rápido."],"A vacina apresenta o antígeno (inativado ou enfraquecido) ao sistema imunológico, que produz anticorpos e células de memória. Com isso, ele reage rápido numa nova exposição. A vacina não contém anticorpos prontos nem medicamento, e os antígenos não “atacam” o invasor."),
 ()=>mk("transf",ir("2026.2 · Q28")+"Uma turma do 9º ano observou misturas: (1) água + álcool: misturaram totalmente e permaneceram misturados após 5 minutos; (2) água + óleo de cozinha: misturaram parcialmente e, após 5 minutos, separaram-se em duas camadas; (3) água + vinagre: misturaram totalmente e permaneceram misturados. Com base no quadro, assinale a CORRETA.","Água, álcool e vinagre formam misturas homogêneas entre si.",["Todas as misturas observadas são heterogêneas, pois envolvem líquidos diferentes.", "Água e óleo formam uma mistura homogênea porque são líquidos à temperatura ambiente.", "O óleo se separa da água apenas porque é menos denso.", "A separação do óleo indica que ocorreu uma transformação química."],"As misturas 1 e 3 têm uma só fase (homogêneas). A 2 tem duas fases (heterogênea). A separação é um fenômeno físico. Além da densidade, o óleo (apolar) não se dissolve na água (polar), então a densidade não é o único motivo."),
 );
+BANK.m.push(
+()=>{const k=pick([3,4,5]),S=(k+2)*pick([30,40,45,50]),t=S/(k+2);
+ return mkn("lin",sr("IFSC 2023.1 · Q11")+`Um sistema tem dois aquários ligados por uma mangueira com registro. O principal está vazio e o secundário tem ${S} L. Ao mesmo tempo, abre-se o registro (vazão de 1 L/min do secundário para o principal) e uma torneira que despeja ${k} L/min direto no principal. A torneira fecha sozinha quando os dois aquários ficam com o mesmo volume. Por quanto tempo ela fica aberta?`,t,[S/(k+1),S/k,S/2,S/(k+3)],`No principal entram ${k+1} L por minuto (${k} da torneira + 1 da mangueira) e do secundário saem 1 L por minuto. Igualando: ${k+1}t = ${S} − t, logo ${k+2}t = ${S} e t = ${t} min.`,x=>fm(x)+" min")},
+()=>{const[F,A,Fe,Z,Sa,p,n]=pick([[500,350,200,20,12,4,6],[400,300,150,20,10,5,5],[500,400,200,20,10,5,6],[800,500,300,40,20,4,8]]),T=F+A+Fe+Z+Sa-A*p/100,c=T/n;
+ return mkn("juros",sr("IFSC 2023.1 · Q12")+`Uma receita de massa de pizza leva ${F} g de farinha, ${A} g de água, ${Fe} g de fermento natural, ${Z} g de azeite e ${Sa} g de sal. Na sova, ${p}% da água evapora. Depois, a massa é dividida em ${n} partes iguais. Quantos gramas tem cada parte?`,c,[(F+A+Fe+Z+Sa)/n,(T+A*p/100*2)/n,(T-A*p/100)/n],`Evaporam ${p}% de ${A} g = ${A*p/100} g. Massa final: ${F+A+Fe+Z+Sa} − ${A*p/100} = ${T} g. Cada parte: ${T} ÷ ${n} = ${c} g.`,x=>fm(x)+" g")},
+()=>{const n=pick([1500,1750,2150,2400,3000,3500]),k=Math.floor(Math.sqrt(n)),f=j=>`${j} < √n < ${j+1}`;
+ return mk("pot",sr("IFSC 2023.1 · Q13")+`Para estimar a raiz quadrada de um número positivo, posiciona-se o número entre dois quadrados perfeitos consecutivos. Usando esse método, em qual intervalo está a raiz quadrada de n = ${n}?`,f(k),[f(k-1),f(k+1),f(k-2),f(k+2)],`${k}² = ${k*k} e ${k+1}² = ${(k+1)**2}. Como ${k*k} < ${n} < ${(k+1)**2}, temos ${k} < √${n} < ${k+1}.`)},
+()=>{const d=pick([8,10,12]),h=pick([15,16,18,20]),a=pick([2,3]),V=3*(d/2)**2*h,c=Math.floor(V/a**3);
+ return mkn("vol",sr("IFSC 2023.1 · Q14")+`Uma lata de massa corrida, totalmente cheia, tem interior cilíndrico com ${d} cm de diâmetro e ${h} cm de profundidade. Toda a massa será usada para fazer cubos maciços de ${a} cm de aresta. Considerando π = 3, quantos cubos inteiros podem ser formados?`,c,[Math.ceil(V/a**3)+1,Math.floor(3*d*d*h/a**3),Math.floor(V/a**2),c-3],`Raio = ${d/2} cm. Volume da lata = 3 · ${d/2}² · ${h} = ${V} cm³. Volume de cada cubo = ${a}³ = ${a**3} cm³. ${V} ÷ ${a**3} ≈ ${fm(V/a**3)}, então cabem ${c} cubos inteiros.`,x=>fm(x)+" cubos")},
+()=>{const B=pick([120,180,240]),[a,b]=pick([[[3,4],[7,12]],[[5,6],[2,3]],[[1,4],[3,4]]]),sa=B-B*a[0]/a[1],sb=B-B*b[0]/b[1],c=sa+sb;
+ return mkn("frac",sr("IFSC 2023.1 · Q15")+`Ana e Bia receberam uma barra de chocolate de ${B} g cada. Ana comeu ${a[0]}/${a[1]} da sua barra e Bia comeu ${b[0]}/${b[1]} da sua. Juntando as sobras das duas barras, quantos gramas de chocolate restam?`,c,[B*a[0]/a[1]+B*b[0]/b[1],2*B-c,B,Math.abs(sa-sb)],`Ana comeu ${B*a[0]/a[1]} g e sobrou ${sa} g. Bia comeu ${B*b[0]/b[1]} g e sobrou ${sb} g. Sobras: ${sa} + ${sb} = ${c} g.`,x=>fm(x)+" g")},
+()=>{const x=pick([8,10,12,15]),y=pick([3,4,5,6]),c=(x+y)**2;
+ return mkn("prod",sr("IFSC 2023.1 · Q16")+`Um terreno quadrado foi dividido em quatro canteiros: A, quadrado de lado x; B e C, retângulos de x por y; e D, quadrado de lado y. Sendo x = ${x} m e y = ${y} m, qual é a área total do terreno?`,c,[x*x+y*y,x*x+x*y+y*y,2*x*x+2*y*y,x*x+3*x*y+y*y],`Área = x² + 2xy + y² = (x + y)² = (${x} + ${y})² = ${c} m². Atenção: (x + y)² não é x² + y².`,x=>fm(x)+" m²")},
+()=>{const n=pick([3,4]),a=pick([110,120,150]),q=pick([130,140,160]),B=n*a*.7,C=2*q*.8;
+ return mkn("juros",sr("IFSC 2023.1 · Q17")+`Uma loja dá desconto sobre o total da compra: 10% para 1 peça, 20% para 2 peças e 30% para 3 peças ou mais. Bruna levou ${n} peças de ${RS2(a)} cada e Camila levou 2 peças de ${RS2(q)} cada. Quanto as duas pagaram juntas?`,B+C,[n*a*.8+C,B+2*q*.7,n*a*.7+2*q*.9,n*a*.9+C],`Bruna: ${n} · ${a} = ${n*a}, com 30% de desconto = ${RS2(B)}. Camila: 2 · ${q} = ${2*q}, com 20% de desconto = ${RS2(C)}. Total: ${RS2(B+C)}.`,RS2)},
+()=>{const f=pick([4,5,6]),t=pick([2,3]),[u,v]=pick([[800,460],[600,350],[900,540]]),c=2*f+(u+v)*t/100;
+ return mkn("juros",sr("IFSC 2023.1 · Q18")+`Um banco cobra, por transferência, uma taxa fixa de ${RS2(f)} mais ${t}% do valor transferido. Para fazer duas transferências, uma de ${RS2(u)} e outra de ${RS2(v)}, quanto o banco cobrará ao todo?`,c,[f+(u+v)*t/100,2*f+u*t/100,2*f+(u+v)*t/10,(u+v)*t/100],`Taxas fixas: 2 · ${f} = ${2*f}. Percentual: ${t}% de ${u+v} = ${(u+v)*t/100}. Total: ${RS2(c)}.`,RS2)},
+()=>{const[N,k,V]=pick([[36,11,110],[40,15,220],[30,6,120],[40,18,110],[48,8,120]]),c=V/(N-k);
+ return mkn("tres",sr("IFSC 2023.1 · Q19")+`Uma lâmpada de ${V} volts tem ${N} LEDs ligados em série, e a tensão se divide igualmente entre eles. ${k} LEDs queimaram e foram removidos, com os pontos soldados para a corrente voltar a passar. Quantos volts cada LED restante passa a receber?`,c,[V/N,V/k,V/(N+k),V/(N-k)*2],`Restam ${N} − ${k} = ${N-k} LEDs. Cada um recebe ${V} ÷ ${N-k} = ${fm(c)} V.`,x=>fm(x)+" volts")},
+()=>{const T=pick([2700,3450,3900,4200]),c=2*T/3;
+ return mkn("lin",sr("IFSC 2023.1 · Q20")+`Em uma campanha beneficente, um mercado doa o dobro da quantidade de alimentos doada pelos clientes. Ao final, a entidade recebeu ${fm(T)} kg no total. Quantos quilogramas foram doados pelo mercado?`,c,[T/3,T/2,T-T/4,T*2/5],`Se os clientes doaram x, o mercado doou 2x, e x + 2x = ${fm(T)}. Então x = ${fm(T/3)} kg e o mercado doou 2x = ${fm(c)} kg.`,x=>fm(x)+" kg")},
+);
+BANK.p.push(
+()=>stm("var",sr("IFSC 2023.1 · Q01")+"Em Portugal, no Brasil e em Moçambique, o mesmo veículo pode ser chamado de “autocarro”, “ônibus” e “machimbombo”, respectivamente. Analise as afirmações:",[
+["Os três nomes designam o mesmo veículo.",true,"são variantes regionais do mesmo referente."],
+["Os três nomes só são usados em situações formais.",false,"são variantes geográficas e aparecem em qualquer registro."],
+["A variação do português nos países africanos resulta também do contato com as línguas nativas locais.",true,"o contato entre línguas deixa marcas no vocabulário e na gramática."],
+["O português do Brasil sofreu influência de línguas indígenas e africanas.",true,"há muitas palavras de origem tupi e banto."],
+["Quem diz “machimbombo” comete erro, pois só existe uma forma correta.",false,"variação não é erro."],
+["A variação linguística ocorre só no vocabulário, nunca na pronúncia ou na gramática.",false,"ela ocorre em todos os níveis da língua."]]),
+()=>stm("fig",sr("IFSC 2023.1 · Q07")+"Leia a estrofe:<br><i>Não sei se o rio corre<br>ou se é a cidade que passa.<br>O dia vira de tarde,<br>e a tarde vira de graça.</i><br>Analise as afirmações:",[
+["O texto é um poema, pois se organiza em versos e estrofe.",true,"há versos organizados em estrofe."],
+["A estrofe é um quarteto, por ter quatro versos.",true,"quarteto é a estrofe de quatro versos."],
+["O texto forma um soneto.",false,"o soneto tem 14 versos, em quatro estrofes."],
+["O uso de maiúscula no início de cada verso é obrigatório.",false,"é facultativo."],
+["Os versos 2 e 4 rimam entre si (“passa” e “graça”).",true,"as terminações em -aça rimam."]]),
+()=>mk("gram",ir("2023.1 · Q03")+"No trecho “o professor Carlos Drummond visitou o Instituto Federal de Santa Catarina, em Florianópolis”, os termos “Carlos Drummond”, “Instituto Federal de Santa Catarina” e “Florianópolis” são grafados com inicial maiúscula porque:","de acordo com a norma-padrão, são nomes próprios.",["são palavras importantes para o assunto do texto.","o autor quis dar destaque a esses termos.","todo nome de lugar deve vir em maiúsculas.","a maiúscula indica que o termo é uma citação."],"Nomes próprios (pessoas, lugares, instituições) levam inicial maiúscula pela norma-padrão, e não por escolha do autor ou por importância do termo."),
+()=>mk("var",ir("2023.1 · Q04")+"Uma notícia moçambicana traz as grafias “acções” e “sector”, enquanto no Brasil se escreve “ações” e “setor”. Sobre o Acordo Ortográfico da língua portuguesa, assinale a CORRETA:","É um instrumento político que busca padronizar a grafia nos países de língua portuguesa.",["Preserva as diferentes grafias de uma mesma palavra em cada país.","Altera tanto a língua escrita quanto a língua falada.","Foi adaptado com a mesma facilidade por todos os países.","Faz com que “acções” e “ações” passem a ser escritas igual em todos os países sem exceção."],"O Acordo trata da grafia, não da fala. É um acordo político entre países e a adaptação não foi igual em todos."),
+()=>mk("var",ir("2023.1 · Q09")+"Em uma placa de carro, um desenho de letras trocou “r” por “l”: “Frorianópolis”, em vez de “Florianópolis”. Sobre ortografia e variação linguística, assinale a CORRETA:","A inadequação ortográfica pode causar prejuízos na comunicação.",["O último acordo ortográfico aproximou totalmente a escrita da fala.","A variação da fala nunca interfere na escrita.","A troca de “l” por “r” mostra desconhecimento da língua falada.","A escrita, ao contrário da fala, não precisa de ensino escolar."],"A troca de “l” por “r” é comum na fala, mas a escrita segue a norma ortográfica, e desvios dela podem atrapalhar a comunicação, até com consequências práticas. A escrita se aprende com ensino."),
+()=>mk("generos",ir("2023.1 · Q10")+"Em uma legenda de foto, três policiais mulheres aparecem identificadas como “Sargento”, “Soldado” e “Soldado”, todas no masculino. Assinale a CORRETA:","Historicamente esses postos foram ocupados por homens, o que ajuda a entender o uso só da forma masculina.",["A flexão em “a” depende do aval de dicionaristas, por isso não existe “soldada”.","O uso do masculino indica que não há mulheres na corporação.","Nomes como “coronel” e “general” impedem qualquer flexão de gênero nos postos.","A estrutura do português impede trocar o “o” final por “a”."],"A língua permite a flexão (“soldada”, “sargenta”). O uso do masculino é uma convenção histórica, não uma limitação da língua."),
+);
 const bankQs=(s,n)=>shuf(BANK[s]).slice(0,n).map(f=>f());
 
 function setup(){
  clearInterval(timer);let best="";try{const v=localStorage.getItem("fed-best");if(v)best=`<p>Melhor resultado até agora: <b>${v}%</b></p>`}catch(e){}
- $("#test").innerHTML=`<div class="row"><label>Matéria<select id="tc"><option value="all">Prova completa (28 questões)</option><option value="real">Prova no estilo IFSC (28 questões, só variações das provas anteriores)</option>${SUB.map(([s,n])=>`<option value="${s}">${n}</option>`).join("")}</select></label><label><span id="countTitle">Questões</span><select id="tn"><option value="5">5</option><option value="7" selected>7</option><option value="10">10</option><option value="15">15</option></select></label><button class="pri" id="go">Iniciar simulado</button></div><p id="limitNote" style="display:none;color:var(--mute);font-size:14px">No modo “Prova no estilo IFSC”, o máximo é 7 questões por matéria, conforme a quantidade de variações disponível no banco.</p>${best}${shortcuts()}`;
+ $("#test").innerHTML=`<div class="row"><label>Matéria<select id="tc"><option value="all">Prova completa (28 questões)</option><option value="real">Prova no estilo IFSC (28 questões)</option>${SUB.map(([s,n])=>`<option value="${s}">${n}</option>`).join("")}</select></label><label><span id="countTitle">Questões</span><select id="tn"><option value="5">5</option><option value="7" selected>7</option><option value="10">10</option><option value="15">15</option></select></label><button class="pri" id="go">Iniciar simulado</button></div><p id="limitNote" style="display:none;color:var(--mute);font-size:14px">No modo “Prova no estilo IFSC”, todas as questões são derivadas de provas anteriores do IFSC: variações com números e enunciados novos ou, quando o enunciado não pode ser alterado, adaptações. O máximo é 7 questões por matéria, conforme a quantidade disponível no banco.</p>${best}${shortcuts()}`;
  $("#tc").onchange=updateSetupControls;
  $("#tn").onchange=updateSetupControls;
  $("#go").onclick=()=>{const c=$("#tc").value,n=+$("#tn").value;c==="all"||c==="real"?start(c,n*4):start(SUB.find(x=>x[0]===c)[2].map(f=>f.id),n,c)};
@@ -1549,7 +1562,7 @@ function updateSetupControls(){
  if(c==="real"&&n>7)sel.value="7";
  const per=+sel.value,total=per*4;
  $("#tc").options[0].textContent=`Prova completa (${total} questões)`;
- $("#tc").options[1].textContent=`Prova no estilo IFSC (${total} questões, só variações das provas anteriores)`;
+ $("#tc").options[1].textContent=`Prova no estilo IFSC (${total} questões)`;
 }
 function start(ids,n,s){
  cfg={ids,n,s};let qs;
@@ -1781,6 +1794,9 @@ function cd(){
 }
 })();
 
+const nv=$("nav"),nvU=()=>{const h=nv.parentNode;h.classList.toggle("mr",nv.scrollLeft+nv.clientWidth<nv.scrollWidth-4);h.classList.toggle("ml",nv.scrollLeft>4)};
+nv.addEventListener("scroll",nvU,{passive:true});addEventListener("resize",nvU);addEventListener("load",nvU);if(window.ResizeObserver)new ResizeObserver(nvU).observe(nv);nvU();
+const nvS=d=>nv.scrollBy({left:d*nv.clientWidth*.7,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});$("#nvl").onclick=()=>nvS(-1);$("#nvr").onclick=()=>nvS(1);
 route();
 
 </script></body></html>
